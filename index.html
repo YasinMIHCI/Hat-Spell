@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Atelier des Glyphes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- APP:START -->
+<div class="app">
+  <header class="toolbar">
+    <h1 class="brand">Atelier des Glyphes</h1>
+    <div class="tools" role="group" aria-label="Outils">
+      <button id="tool-plume" class="tool" aria-pressed="true" title="Plume (P)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 3c-6 1-11 6-13 13l-2 5 5-2c7-2 12-7 13-13l-3 1 1-4z M7 16l5-5"/></svg>Plume
+      </button>
+      <button id="tool-gomme" class="tool" aria-pressed="false" title="Gomme (E)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16l9-9 6 6-7 7H7z M9 11l6 6 M4 21h16"/></svg>Gomme
+      </button>
+    </div>
+    <div id="ink" class="ink" title="Réserve d'encre">
+      <span class="well"><span id="ink-fill" class="ink-fill"></span></span>
+      <span class="ink-text"><span class="label">Encre</span><span id="ink-level" class="num">100 %</span></span>
+      <button id="refill" class="btn small">Tremper (R)</button>
+    </div>
+    <div class="options">
+      <label class="field"><span class="label">Support</span>
+        <select id="surface">
+          <option value="parchemin">Parchemin</option>
+          <option value="pierre">Pierre</option>
+          <option value="tissu">Tissu</option>
+          <option value="eau">Eau</option>
+        </select>
+      </label>
+      <label class="switch"><input id="night" type="checkbox"><span>Nuit</span></label>
+      <label class="switch"><input id="analysis" type="checkbox" checked><span>Annotations</span></label>
+      <button id="clear" class="btn ghost">Tout effacer</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <div class="stage">
+      <canvas id="scene" aria-label="Feuille de dessin des glyphes"></canvas>
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    </div>
+
+    <aside class="panel">
+      <div class="tabs" role="tablist">
+        <button id="tab-glyphes" role="tab" aria-selected="true">Glyphes</button>
+        <button id="tab-grimoire" role="tab" aria-selected="false">Grimoire</button>
+        <button id="tab-regles" role="tab" aria-selected="false">Règles</button>
+      </div>
+
+      <section id="panel-glyphes" class="tab-panel" role="tabpanel">
+        <div id="glyph-list" class="glyph-list"></div>
+      </section>
+
+      <section id="panel-grimoire" class="tab-panel" role="tabpanel" hidden>
+        <h2>Sigil</h2>
+        <p class="note">Au centre. Il donne l'élément.</p>
+        <div id="sigil-list" class="tile-grid"></div>
+        <h2>Signes</h2>
+        <p class="note">Dans la couronne. Clic pour ajouter, clic droit pour retirer.</p>
+        <div id="sign-list" class="tile-grid signs"></div>
+        <div class="composer">
+          <p class="recipe-label">Recette</p>
+          <p id="recipe" class="recipe"></p>
+          <label id="proj-dir" class="field" hidden><span class="label">Direction de la projection</span>
+            <select id="proj-angle">
+              <option value="0">Est</option>
+              <option value="-45">Nord-est</option>
+              <option value="-90">Nord</option>
+              <option value="-135">Nord-ouest</option>
+              <option value="180">Ouest</option>
+              <option value="45">Sud-est</option>
+            </select>
+          </label>
+          <label class="switch"><input id="leave-open" type="checkbox"><span>Laisser l'anneau ouvert (à fermer vous-même)</span></label>
+          <div class="row">
+            <button id="autodraw" class="btn primary">Tracer pour moi</button>
+            <button id="show-guide" class="btn">Afficher le guide</button>
+            <button id="clear-signs" class="btn ghost">Vider les signes</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="panel-regles" class="tab-panel prose" role="tabpanel" hidden>
+        <h2>La magie se dessine</h2>
+        <p>Un glyphe a trois couches. Le <strong>sigil</strong> au centre donne l'élément. Les <strong>signes</strong> autour donnent la forme et le comportement. L'<strong>anneau</strong> extérieur contient le tout. Le sort part au moment où l'anneau se ferme.</p>
+        <h3>Ce que le simulateur mesure</h3>
+        <ul>
+          <li><strong>Taille</strong> : un grand anneau donne un sort plus puissant.</li>
+          <li><strong>Netteté</strong> : un anneau rond et un trait stable font durer le sort.</li>
+          <li><strong>Équilibre</strong> : sans signe de projection, le sort dérive vers le côté où les signes sont les plus nombreux.</li>
+          <li><strong>Lacunes</strong> : un trou dans l'anneau, même petit, bloque le sort. Une plume sèche laisse des trous.</li>
+          <li><strong>Lisibilité</strong> : un signe mal formé rend le sort instable et provoque des ratés.</li>
+        </ul>
+        <h3>Gestes</h3>
+        <ul>
+          <li>Préparez un sort avec l'anneau ouvert, puis fermez-le d'un trait pour le lancer.</li>
+          <li>Un coup de gomme sur l'anneau d'un sort actif l'interrompt.</li>
+          <li>Ajoutez un signe dans un anneau actif : le sort se reconfigure sans s'arrêter.</li>
+          <li>Les sorts partagent le même monde. L'eau éteint le feu, le vent pousse tout, la lumière perce la nuit.</li>
+        </ul>
+        <h3>Raccourcis</h3>
+        <p class="keys"><kbd>P</kbd> plume · <kbd>E</kbd> gomme · <kbd>R</kbd> tremper · <kbd>N</kbd> nuit</p>
+        <p class="note">Les tracés sont des créations originales qui suivent la grammaire du manga <em>L'Atelier des Sorciers</em> de Kamome Shirahama. L'étude complète se trouve dans <code>docs/etude-pictogrammes.md</code>.</p>
+      </section>
+    </aside>
+  </main>
+</div>
+<script type="module" src="js/main.js"></script>
+<!-- APP:END -->
+</body>
+</html>

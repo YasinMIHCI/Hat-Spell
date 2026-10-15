@@ -1,0 +1,1 @@
+{"type":"module","private":true,"name":"hat-spell","scripts":{"test":"node tests/run-tests.mjs","start":"npx http-server -c-1 -p 8080 ."}}
