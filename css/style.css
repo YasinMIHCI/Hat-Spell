@@ -222,3 +222,73 @@ code { font-family: var(--font-mono); font-size: 0.85em; }
 @media (prefers-reduced-motion: reduce) {
   .toast, .ink-fill { transition: none; }
 }
+
+/* Intro : la nuit de l'atelier, toujours sombre quel que soit le thème. */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #070818;
+  color: #f3ecd8;
+  --hole: 0px; --hx: 50%; --hy: 40%;
+  transition: opacity 0.45s ease;
+}
+.intro.revealing {
+  -webkit-mask-image: radial-gradient(circle at var(--hx) var(--hy), transparent var(--hole), #000 calc(var(--hole) + 60px));
+  mask-image: radial-gradient(circle at var(--hx) var(--hy), transparent var(--hole), #000 calc(var(--hole) + 60px));
+}
+.intro.gone { opacity: 0; pointer-events: none; }
+.intro canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.intro-text {
+  position: absolute;
+  left: 0; right: 0;
+  top: 84%;
+  transform: translateY(-50%);
+  text-align: center;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+  pointer-events: none;
+}
+.intro-kicker {
+  margin: 0 0 6px;
+  font: 500 0.8rem/1 var(--font-body);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #c9b98f;
+  opacity: 0;
+}
+.intro-title {
+  margin: 0;
+  font: 400 clamp(2rem, 6.5vw, 4.4rem)/1.05 var(--font-display);
+  letter-spacing: 0.04em;
+  text-wrap: balance;
+  color: #fff4d6;
+  text-shadow: 0 0 24px rgba(255, 210, 120, 0.55);
+}
+.intro-title span {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(10px);
+}
+.intro-title.show span {
+  animation: intro-letter 0.7s cubic-bezier(.2,.7,.2,1) forwards;
+  animation-delay: calc(var(--i) * 28ms);
+}
+.intro.lit .intro-kicker { animation: intro-fade 0.8s 0.5s ease forwards; }
+@keyframes intro-letter { to { opacity: 1; filter: blur(0); transform: none; } }
+@keyframes intro-fade { to { opacity: 1; } }
+.intro-skip {
+  position: absolute;
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  font: 500 0.85rem var(--font-body);
+  color: #c9cfee;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+.intro-skip:hover { background: rgba(255, 255, 255, 0.12); }
+@media (prefers-reduced-motion: reduce) { .intro { display: none; } }

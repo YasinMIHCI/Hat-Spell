@@ -4,6 +4,7 @@ import { SIGILS, SIGNS, composeGlyph, distributeSigns } from './glyphs.js';
 import { analyze, compass } from './analyzer.js';
 import { compile, SURFACES, FORM_NAMES } from './spells.js';
 import { World } from './world.js';
+import { playIntro } from './intro.js';
 
 const TAU = Math.PI * 2;
 const INK_CAPACITY = 100;
@@ -680,15 +681,15 @@ updateInkGauge();
 renderPanel();
 requestAnimationFrame(frame);
 
-// Exemple à l'ouverture : une plume trace une sphère d'eau.
-setTimeout(() => {
+// Exemple à l'ouverture, après l'intro : une plume trace une sphère d'eau.
+playIntro().then(() => setTimeout(() => {
   if (state.strokes.length) return;
   const R = Math.max(70, Math.min(130, Math.min(state.w, state.h) * 0.22));
   startAutodraw(composeGlyph({
     cx: state.w * 0.5, cy: state.h * 0.42, R,
     sigil: 'eau', signs: distributeSigns(['convergence', 'persistance', 'levitation']),
   }), 1.6);
-}, 400);
+}, 300));
 
 // Accès pour les tests automatisés.
 window.__atelier = { state, world, analyze, startAutodraw, composeGlyph, distributeSigns, reanalyze, addStroke };

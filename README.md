@@ -45,6 +45,7 @@ js/analyzer.js    anneaux, zones, métriques de qualité
 js/spells.js      compilation glyphe → paramètres de sort
 js/world.js       moteur de particules et interactions élémentaires
 js/main.js        plume, encre, rendu, interface
+js/intro.js       intro animée (5 s)
 ```
 
 Les tracés sont des créations originales qui suivent la grammaire du manga. Ce ne sont pas des reproductions des planches.
